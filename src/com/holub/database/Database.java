@@ -576,11 +576,19 @@ public final class Database
 		{	for( Iterator i = values.iterator(); i.hasNext(); )
 			{	Table current = (Table ) i.next();
 				if( current.isDirty() )
-				{	Writer out =
-						new FileWriter(
-								new File(location, current.name() + ".csv"));
+				{
+					Writer out =
+							new FileWriter(
+									new File(location, current.name() + ".csv"));
 					current.export( new CSVExporter(out) );
 					out.close();
+
+					Writer out2 =
+							new FileWriter(
+									new File(location, current.name() + ".html"));
+					current.export( new HTMLExporter(out2) );
+					out2.close();
+
 				}
 			}
 		}
