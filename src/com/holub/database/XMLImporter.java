@@ -88,10 +88,9 @@ public class XMLImporter implements Table.Importer {
     }
     public void startTable()			throws IOException
     {
-        System.out.println(in.readLine());
+        in.readLine();
         String temp = in.readLine().substring(13);
         tableName = temp.substring(0, temp.length() - 2);
-        System.out.println(tableName);
         ArrayList<String> row = new ArrayList<>();
 
         while (true) {
@@ -102,12 +101,10 @@ public class XMLImporter implements Table.Importer {
 
             if (str.equals( "\t<row>" ) || str.equals("\t</row>")) {
                 if (str.equals("\t<row>")) {
-                    System.out.println("row");
                     row_len++;
                 }
 
                 if (str.equals("\t</row>")) {
-                    System.out.println("/row");
                     list.add(row);
                     row = new ArrayList<>();
                 }
@@ -145,6 +142,10 @@ public class XMLImporter implements Table.Importer {
             row_idx++;
         }
         return row;
+    }
+
+    public ArrayList getList() {
+        return this.list;
     }
 
     public void endTable() throws IOException {}

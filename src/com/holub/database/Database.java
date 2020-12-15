@@ -852,6 +852,8 @@ public final class Database
 				if( in.matchAdvance(COMMA) == null )
 					break;
 			}
+		} else {
+
 		}
 		return identifiers;
 	}
