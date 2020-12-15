@@ -26,7 +26,7 @@ public class XMLExporter implements Table.Exporter
         }
 
         out.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
-        out.write("<table=\"" + this.tableName +"\">\n");
+        out.write("<table name=\"" + this.tableName +"\">\n");
 
     }
 

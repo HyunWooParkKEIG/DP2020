@@ -302,14 +302,17 @@ public final class Database
 		{	String tableName = (String)key;
 			try
 			{	Table desiredTable = (Table) realMap.get(tableName);
-				if( desiredTable == null )
-				{	desiredTable = TableFactory.load(
-									tableName + ".csv",location);
-					put(tableName, desiredTable);
+				if( desiredTable == null ) {
+					desiredTable = TableFactory.load(tableName + ".csv",location);
 				}
+
+				if( desiredTable == null ) {
+					desiredTable = TableFactory.load(tableName + ".xml",location);
+				}
+				put(tableName, desiredTable);
 				return desiredTable;
 			}
-			catch( IOException e )
+			catch( Exception e )
 			{	// Can't use verify(...) or error(...) here because the
 				// base-class "get" method doesn't throw any exceptions.
 				// Kludge a runtime-exception toss. Call in.failure()
@@ -577,17 +580,23 @@ public final class Database
 			{	Table current = (Table ) i.next();
 				if( current.isDirty() )
 				{
-					Writer out =
+					Writer csv =
 							new FileWriter(
 									new File(location, current.name() + ".csv"));
-					current.export( new CSVExporter(out) );
-					out.close();
+					current.export( new CSVExporter(csv) );
+					csv.close();
 
-					Writer out2 =
+					Writer html =
 							new FileWriter(
 									new File(location, current.name() + ".html"));
-					current.export( new HTMLExporter(out2) );
-					out2.close();
+					current.export( new HTMLExporter(html) );
+					html.close();
+
+					Writer xml =
+							new FileWriter(
+									new File(location, current.name() + ".xml"));
+					current.export( new XMLExporter(xml) );
+					xml.close();
 
 				}
 			}

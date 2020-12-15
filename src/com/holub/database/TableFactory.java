@@ -87,16 +87,30 @@ public class TableFactory
 	 * 			recognized.
 	 */
 	public static Table load( String name, File directory )
-													throws IOException
 	{
-		if( !(name.endsWith( ".csv" ) || name.endsWith( ".CSV" )) )
-			throw new java.io.IOException(
-					 "Filename (" +name+ ") does not end in "
-					+"supported extension (.csv)" );
+		Table loaded = null;
+		Table.Importer importer = null;
+		try {
+			Reader in = new FileReader( new File( directory, name ));
+			if (name.endsWith(".csv")) {
+				importer = new CSVImporter(in);
+			}
+			if (name.endsWith(".xml")) {
+				importer = new XMLImporter(in);
+			}
 
-		Reader in = new FileReader( new File( directory, name ));
-		Table loaded = new ConcreteTable( new CSVImporter( in ));
-		in.close();
-		return loaded;
+			if (importer != null) {
+				//System.out.println(importer.loadWidth());
+				loaded = new ConcreteTable(importer);
+			}
+
+			in.close();
+			return loaded;
+		} catch (Exception e) {
+			return null;
+		}
+
+
+
 	}
 }
