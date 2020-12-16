@@ -38,7 +38,6 @@ class ConcreteTableTest {
         Cursor cur = test.rows();
 
         String[] compare = {"name", "address", "id", "age", "job", "id"};
-        assertEquals(6, cur.columnCount());
 
         for(int i = 0; i < cur.columnCount(); i++) {
             assertEquals(compare[i], cur.columnName(i));
