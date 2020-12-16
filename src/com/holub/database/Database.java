@@ -843,9 +843,8 @@ public final class Database
 	// or null if a * was found.
 
 	private List idList()			throws ParseFailure
-	{	List identifiers = null;
-		if( in.matchAdvance(STAR) == null )
-		{	identifiers = new ArrayList();
+	{	List identifiers = new ArrayList();
+		if( in.matchAdvance(STAR) == null ) {
 			String id;
 			while( (id = in.required(IDENTIFIER)) != null )
 			{	identifiers.add(id);
@@ -853,7 +852,7 @@ public final class Database
 					break;
 			}
 		} else {
-
+			identifiers.add("*star");
 		}
 		return identifiers;
 	}

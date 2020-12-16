@@ -556,21 +556,45 @@ import com.holub.tools.ArrayIterator;
 		String[] columnNames = null;
 		Table[] otherTables = null;
 
+		if (other != null)
+			otherTables = (Table[]) other.toArray(new Table[other.size()]);
+
 		if (requestedColumns != null) // SELECT *
 		{
 			// Can't cast an Object[] to a String[], so make a copy to ensure
 			// type safety.
 
-			columnNames = new String[requestedColumns.size()];
 			int i = 0;
 			Iterator column = requestedColumns.iterator();
+			String firstColumn = column.next().toString();
 
-			while (column.hasNext())
-				columnNames[i++] = column.next().toString();
+			if (firstColumn.equals("*star")) {
+				ArrayList<String> temp = new ArrayList<>();
+
+				String[] tColumn = this.toString().split("\n")[1].split("\t");
+				for (int k = 0; k < tColumn.length; k++) {
+					temp.add(tColumn[k]);
+				}
+				for (int j = 0; j < otherTables.length; j++) {
+					tColumn = otherTables[j].toString().split("\n")[1].split("\t");
+					for (int k = 0; k < tColumn.length; k++) {
+						temp.add(tColumn[k]);
+					}
+				}
+
+				columnNames = temp.toArray(new String[temp.size()]);
+			} else {
+				columnNames = new String[requestedColumns.size()];
+				columnNames[i] = firstColumn;
+				i++;
+
+				while (column.hasNext()) {
+					columnNames[i] = column.next().toString();
+					i++;
+				}
+			}
+
 		}
-
-		if (other != null)
-			otherTables = (Table[]) other.toArray(new Table[other.size()]);
 
 		return select(where, columnNames, otherTables);
 	}
